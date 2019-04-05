@@ -61,7 +61,7 @@ WORKDIR /opt/iobroker/
 RUN sudo npm install node-gyp -g \
  && sudo tar -cf /opt/initial_iobroker.tar -C / opt/iobroker \
  ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
- && npm config set unsafe-perm true
+ && npm config set unsafe-perm false
  ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
 
 ## Add necessary scripts
