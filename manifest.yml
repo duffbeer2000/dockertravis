@@ -1,0 +1,13 @@
+image: duffbeer2000/iobroker:latest
+manifests:
+  -
+    image: duffbeer2000/iobroker:amd64
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: duffbeer2000/iobroker:armhf
+    platform:
+      architecture: arm
+      variant: armv7l
+      os: linux
