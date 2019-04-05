@@ -11,18 +11,18 @@ install:
   - chmod +x manifest-tool
 script:
 # Build amd64
-  - docker build -t "duffbeer2000/iobroker:amd64" ./amd64
+  - docker build -t "duffbeer2000/dockertravis:amd64" ./amd64
 # Build amd64-min
-  - docker build -t "duffbeer2000/iobroker:amd64-min" ./amd64-min
+  - docker build -t "duffbeer2000/dockertravis:amd64-min" ./amd64-min
 # Build amd64-full
-  - docker build -t "duffbeer2000/iobroker:amd64-full" ./amd64-full
+  - docker build -t "duffbeer2000/dockertravis:amd64-full" ./amd64-full
 # Build armhf
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-  - docker build -t "duffbeer2000/iobroker:armhf" ./armhf
+  - docker build -t "duffbeer2000/dockertravis:armhf" ./armhf
 # Build armhf-min
-  - docker build -t "duffbeer2000/iobroker:armhf-min" ./armhf-min
+  - docker build -t "duffbeer2000/dockertravis:armhf-min" ./armhf-min
 # Build armhf-full
-  - docker build -t "duffbeer2000/iobroker:armhf-full" ./armhf-full
+  - docker build -t "duffbeer2000/dockertravis:armhf-full" ./armhf-full
 #
 after_success:
 # Tag and push built images
@@ -30,26 +30,26 @@ after_success:
     if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       docker login -u="$DOCKER_LOGIN" -p="$DOCKER_PASS"
       VERSION=$(cat .VERSION)
-      docker tag duffbeer2000/iobroker:amd64 duffbeer2000/iobroker:amd64-$VERSION
-      docker push duffbeer2000/iobroker:amd64
-      docker push duffbeer2000/iobroker:amd64-$VERSION
-      docker tag duffbeer2000/iobroker:amd64-min duffbeer2000/iobroker:amd64-min-$VERSION
-      docker push duffbeer2000/iobroker:amd64-min
-      docker push duffbeer2000/iobroker:amd64-min-$VERSION
-      docker tag duffbeer2000/iobroker:amd64-full duffbeer2000/iobroker:amd64-full-$VERSION
-      docker push duffbeer2000/iobroker:amd64-full
-      docker push duffbeer2000/iobroker:amd64-full-$VERSION
-      docker tag duffbeer2000/iobroker:armhf duffbeer2000/iobroker:armhf-$VERSION
-      docker push duffbeer2000/iobroker:armhf
-      docker push duffbeer2000/iobroker:armhf-$VERSION
-      docker tag duffbeer2000/iobroker:armhf-min duffbeer2000/iobroker:armhf-min-$VERSION
-      docker push duffbeer2000/iobroker:armhf-min
-      docker push duffbeer2000/iobroker:armhf-min-$VERSION
-      docker tag duffbeer2000/iobroker:armhf-full duffbeer2000/iobroker:armhf-full-$VERSION
-      docker push duffbeer2000/iobroker:armhf-full
-      docker push duffbeer2000/iobroker:armhf-full-$VERSION
+      docker tag duffbeer2000/dockertravis:amd64 duffbeer2000/dockertravis:amd64-$VERSION
+      docker push duffbeer2000/dockertravis:amd64
+      docker push duffbeer2000/dockertravis:amd64-$VERSION
+      docker tag duffbeer2000/dockertravis:amd64-min duffbeer2000/dockertravis:amd64-min-$VERSION
+      docker push duffbeer2000/dockertravis:amd64-min
+      docker push duffbeer2000/dockertravis:amd64-min-$VERSION
+      docker tag duffbeer2000/dockertravis:amd64-full duffbeer2000/dockertravis:amd64-full-$VERSION
+      docker push duffbeer2000/dockertravis:amd64-full
+      docker push duffbeer2000/dockertravis:amd64-full-$VERSION
+      docker tag duffbeer2000/dockertravis:armhf duffbeer2000/dockertravis:armhf-$VERSION
+      docker push duffbeer2000/dockertravis:armhf
+      docker push duffbeer2000/dockertravis:armhf-$VERSION
+      docker tag duffbeer2000/dockertravis:armhf-min duffbeer2000/dockertravis:armhf-min-$VERSION
+      docker push duffbeer2000/dockertravis:armhf-min
+      docker push duffbeer2000/dockertravis:armhf-min-$VERSION
+      docker tag duffbeer2000/dockertravis:armhf-full duffbeer2000/dockertravis:armhf-full-$VERSION
+      docker push duffbeer2000/dockertravis:armhf-full
+      docker push duffbeer2000/dockertravis:armhf-full-$VERSION
     fi
-# Update repository manifest for multiarch duffbeer2000/iobroker:latest
+# Update repository manifest for multiarch duffbeer2000/dockertravis:latest
   - >
     if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yml
