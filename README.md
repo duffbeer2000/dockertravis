@@ -86,8 +86,8 @@ The `--net=host` option is not yet supported on Mac/Windows. To run this contain
 ```bash
 docker run -d \
     --name=iobroker \
-    -p 80:80 \
-    -p 443:443 \
+    -p 8081:8081 \
+    -p 8082:8082 \
     --restart=always \
     -v /your/iobroker/folder:/opt/iobroker \
     -e IOBROKER_ADMIN_PORT=8081 \
