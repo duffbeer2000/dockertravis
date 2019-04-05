@@ -28,7 +28,11 @@ RUN apt-get update && apt-get install -y \
 	net-tools \
  && rm -rf /var/lib/apt/lists/*
 
-
+# Add WiringPi, install WiringPi
+ADD https://archive.raspberrypi.org/debian/pool/main/w/wiringpi/wiringpi_${WIRINGPI_VERSION}_armhf.deb /wiringpi.deb
+RUN dpkg -i /wiringpi.deb && \
+    rm -f /wiringpi.deb
+	
 ## Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
  && apt-get install -y nodejs \

@@ -50,13 +50,19 @@ RUN mkdir -p /opt/scripts \
 ## ioBroker installation
 RUN echo $(hostname) > /opt/scripts/.install_host \
  && sudo apt-get update \
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
+ && npm config set unsafe-perm true \
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
  && curl -sL https://iobroker.net/install.sh | bash - \
  && sudo rm -rf /var/lib/apt/lists/*
 
 ## Install Node.js native addon build tool
 WORKDIR /opt/iobroker/
 RUN sudo npm install node-gyp -g \
- && sudo tar -cf /opt/initial_iobroker.tar -C / opt/iobroker
+ && sudo tar -cf /opt/initial_iobroker.tar -C / opt/iobroker \
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
+ && npm config set unsafe-perm true
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
 
 ## Add necessary scripts
 COPY scripts /opt/scripts
