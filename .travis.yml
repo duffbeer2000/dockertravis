@@ -1,0 +1,54 @@
+sudo: required
+services:
+  - docker
+language: bash
+env:
+  global:
+ install:
+  - wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
+  - chmod +x manifest-tool
+script:
+# Build amd64
+  - docker build -t "duffbeer2000/iobroker:amd64" ./amd64
+# Build amd64-min
+  - docker build -t "duffbeer2000/iobroker:amd64-min" ./amd64-min
+# Build amd64-full
+  - docker build -t "duffbeer2000/iobroker:amd64-full" ./amd64-full
+# Build armhf
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  - docker build -t "duffbeer2000/iobroker:armhf" ./armhf
+# Build armhf-min
+  - docker build -t "duffbeer2000/iobroker:armhf-min" ./armhf-min
+# Build armhf-full
+  - docker build -t "duffbeer2000/iobroker:armhf-full" ./armhf-full
+#
+after_success:
+# Tag and push built images
+  - >
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      docker login -u="$DOCKER_LOGIN" -p="$DOCKER_PASS"
+      VERSION=$(cat .VERSION)
+      docker tag duffbeer2000/iobroker:amd64 duffbeer2000/iobroker:amd64-$VERSION
+      docker push duffbeer2000/iobroker:amd64
+      docker push duffbeer2000/iobroker:amd64-$VERSION
+      docker tag duffbeer2000/iobroker:amd64-min duffbeer2000/iobroker:amd64-min-$VERSION
+      docker push duffbeer2000/iobroker:amd64-min
+      docker push duffbeer2000/iobroker:amd64-min-$VERSION
+      docker tag duffbeer2000/iobroker:amd64-full duffbeer2000/iobroker:amd64-full-$VERSION
+      docker push duffbeer2000/iobroker:amd64-full
+      docker push duffbeer2000/iobroker:amd64-full-$VERSION
+      docker tag duffbeer2000/iobroker:armhf duffbeer2000/iobroker:armhf-$VERSION
+      docker push duffbeer2000/iobroker:armhf
+      docker push duffbeer2000/iobroker:armhf-$VERSION
+      docker tag duffbeer2000/iobroker:armhf-min duffbeer2000/iobroker:armhf-min-$VERSION
+      docker push duffbeer2000/iobroker:armhf-min
+      docker push duffbeer2000/iobroker:armhf-min-$VERSION
+      docker tag duffbeer2000/iobroker:armhf-full duffbeer2000/iobroker:armhf-full-$VERSION
+      docker push duffbeer2000/iobroker:armhf-full
+      docker push duffbeer2000/iobroker:armhf-full-$VERSION
+    fi
+# Update repository manifest for multiarch duffbeer2000/iobroker:latest
+  - >
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yml
+    fi
