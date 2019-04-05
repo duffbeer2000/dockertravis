@@ -1,4 +1,4 @@
-FROM resin/armv7hf-debian:stretch
+FROM balenalib/armv7hf-debian:stretch
 
 MAINTAINER Christian
 
