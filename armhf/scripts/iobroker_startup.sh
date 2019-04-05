@@ -2,12 +2,14 @@
 
 #Reading ENV-Variables
 avahi=$AVAHI
+ADMIN_PORT=$IOBROKER_ADMIN_PORT
+WEB_PORT=$IOBROKER_WEB_PORT
 bluetooth_enabled=$BT_ENABLE
 asterisk=$ASTERISK
 yahka="false"
 
 #Declarate variables
-version="0.1.5 beta"
+version="0.2.0 beta"
 IOB_USER="iobroker"
 IOB_DIR="/opt/iobroker"
 HOSTNAME_NEW=$(hostname)
@@ -257,8 +259,7 @@ set_capabilities() {
 	capabilities_encoded=${capabilities:(-16)}
 	capabilities_decoded=$(capsh --decode=${capabilities_encoded})
 	
-	# Check if the whole Devices are mounted or maybe the Container is started privilegded
-	DEVICES=$(ls /dev | wc -l)
+	# Check if the container is started privilegded
 	if [[ "${capabilities_encoded}" == "0000003fffffffff" ]]; then
 		${red}
 		echo ''
@@ -354,6 +355,15 @@ if [[ $check_permissions == *"root"* ]]; then
 	fix_dir_permissions
 fi
 
+if [[ ${ADMIN_PORT} != *"8081"* ]]; then
+	cd /opt/iobroker
+	iobroker set admin.0 --port ${ADMIN_PORT}
+fi
+
+if [[ ${WEB_PORT} != *"8082"* ]]; then
+	cd /opt/iobroker
+	iobroker set web.0 --port ${WEB_PORT}
+fi
 
 # Starting ioBroker
 echo ''

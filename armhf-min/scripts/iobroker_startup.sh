@@ -2,6 +2,8 @@
 
 #Reading ENV-Variables
 avahi=$AVAHI
+ADMIN_PORT=$IOBROKER_ADMIN_PORT
+WEB_PORT=$IOBROKER_WEB_PORT
 
 #Deklarate variables
 HOSTNAME_NEW=$(hostname)
@@ -12,7 +14,7 @@ dati=`date '+%Y-%m-%d %H:%M:%S'`
 # Information
 echo ''
 echo '----------------------------------------'
-echo '-----   Image-Version: 0.1.0beta   -----'
+echo '-----   Image-Version: 0.2.0 beta  -----'
 echo '-----      '$dati'      -----'
 echo '----------------------------------------'
 echo ''
@@ -52,6 +54,17 @@ then
 fi
 
 sleep 5
+
+if [[ ${ADMIN_PORT} != *"8081"* ]]; then
+	cd /opt/iobroker
+	iobroker set admin.0 --port ${ADMIN_PORT}
+fi
+
+if [[ ${WEB_PORT} != *"8082"* ]]; then
+	cd /opt/iobroker
+	iobroker set web.0 --port ${WEB_PORT}
+fi
+
 
 # Starting ioBroker
 echo ''

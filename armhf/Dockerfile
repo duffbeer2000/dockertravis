@@ -84,6 +84,8 @@ EXPOSE 8081 8082 8083 8084 8088 9000 9001 50005
 
 ENV LANG="de_DE.UTF-8" \
     TZ="Europe/Berlin" \
-	AVAHI="0"
+	AVAHI="0" \
+	IOBROKER_ADMIN_PORT="8081" \
+	IOBROKER_WEB_PORT="8082"
 
 CMD ["bash", "/opt/scripts/iobroker_startup.sh"]

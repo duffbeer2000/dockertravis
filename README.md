@@ -4,7 +4,7 @@
 
 This Docker image containerizes the ioBroker software from ioBroker GmbH. ioBroker is an integration platform for the Internet of Things, focused on Building Automation, Smart Metering, Ambient Assisted Living, Process Automation, Visualization and Data Logging.
 
-ioBroker is supported on `amd64` and `armhf` (i.e. RaspberryPi 2/3) architectures; RaspBee is supported on `armhf`,.
+ioBroker is supported on `amd64` and `armhf` (i.e. RaspberryPi 2/3) architectures.
 
 This image is available on (and should be pulled from) Docker Hub: `duffbeer2000/dockertravis`.
 
@@ -16,26 +16,24 @@ Current ioBroker version: **2.0.2**
 
 ```bash
 docker run -d \
-    --name=deconz \
+    --name=iobroker \
     --net=host \
     --restart=always \
-    -v /etc/localtime:/etc/localtime:ro \
-    -v /opt/deconz:/root/.local/share/dresden-elektronik/deCONZ \
-    --device=/dev/ttyUSB0 \
-    marthoc/deconz
+    --v /etc/localtime:/etc/localtime:ro \
+    --v /your/iobroker/folder:/opt/iobroker \
+    duffbeer2000/dockertravis
 ```
 
 #### Command line Options
 
 |Parameter|Description|
 |---------|-----------|
-|`--name=deconz`|Names the container "deconz".|
-|`--net=host`|Uses host networking mode for proper uPNP functionality; by default, the web UIs and REST API listen on port 80 and the websockets service listens on port 443. If these ports conflict with other services on your host, you can change them through the environment variables DECONZ_WEB_PORT and DECONZ_WS_PORT described below.|
+|`--name=iobroker`|Names the container "iobroker".|
+|`--net=host`|Uses host networking mode; by default, the web UIs listen on port 8081. If these port conflict with other services on your host, you can change it through the environment variables IOBROKER_WEB_PORT described below.|
 |`--restart=always`|Start the container when Docker starts (i.e. on boot/reboot).|
 |`-v /etc/localtime:/etc/localtime:ro`|Ensure the container has the correct local time (alternatively, use the TZ environment variable, see below).|
-|`-v /opt/deconz:/root/.local/share/dresden-elektronik/deCONZ`|Bind mount /opt/deconz (or the directory of your choice) into the container for persistent storage.|
-|`--device=/dev/ttyUSB0`|Pass the serial device at ttyUSB0 (i.e. a Conbee USB device) into the container for use by deCONZ (if using RaspBee, use /dev/ttyAMA0).|
-|`marthoc/deconz`|This image uses a manifest list for multiarch support; specifying marthoc/deconz (i.e. marthoc/deconz:latest) will pull the correct version for your arch.|
+|`-v /your/iobroker/folder:/opt/iobroker`|Bind mount /opt/deconz (or the directory of your choice) into the container for persistent storage.|
+|`duffbeer2000/dockertravis`|This image uses a manifest list for multiarch support; specifying duffbeer2000/iobroker (i.e. duffbeer2000/iobroker:latest) will pull the correct version for your arch.|
 
 #### Environment Variables
 
@@ -43,18 +41,17 @@ Use these environment variables to change the default behaviour of the container
 
 |Parameter|Description|
 |---------|-----------|
-|`-e DECONZ_WEB_PORT=8080`|By default, the web UIs ("Wireless Light Control" and "Phoscon") and the REST API listen on port 80; only set this environment variable if you wish to change the listen port.|
-|`-e DECONZ_WS_PORT=8443`|By default, the websockets service listens on port 443; only set this environment variable if you wish to change the listen port.|
-|`-e DEBUG_INFO=1`|Sets the level of the deCONZ command-line flag --dbg-info (default 1).|
-|`-e DEBUG_APS=0`|Sets the level of the deCONZ command-line flag --dbg-aps (default 0).|
-|`-e DEBUG_ZCL=0`|Sets the level of the deCONZ command-line flag --dbg-zcl (default 0).|
-|`-e DEBUG_ZDP=0`|Sets the level of the deCONZ command-line flag --dbg-zdp (default 0).|
-|`-e DEBUG_OTAU=0`|Sets the level of the deCONZ command-line flag --dbg-otau (default 0).|
-|`-e DECONZ_DEVICE=/dev/ttyUSB1`|By default, deCONZ searches for RaspBee at /dev/ttyAMA0 and Conbee at /dev/ttyUSB0; when using other USB devices (e.g. a Z-Wave stick) deCONZ may not find RaspBee/Conbee properly. Set this environment variable to the same string passed to --device to force deCONZ to use the specific USB device.|
-|`-e TZ=America/Toronto`|Set the local time zone so deCONZ has the correct time.|
-|`-e DECONZ_VNC_MODE=1`|Set this option to enable VNC access to the container to view the deCONZ ZigBee mesh|
-|`-e DECONZ_VNC_PORT=5900`|Default port for VNC mode is 5900; this option can be used to change this port (but, must be larger than 5900)|
-|`-e DECONZ_VNC_PASSWORD=changeme`|Default password for VNC mode is 'changeme'; this option can (should) be used to change the default password|
+|`-e LANG=de_DE.UTF-8`|Set the local time zone so deCONZ has the correct time.|
+|`-e TZ=Europe/Berlin`|Set the local time zone so deCONZ has the correct time.|
+|`-e IOBROKER_ADMIN_PORT=8081`|By default, the admin UI listen on port 8081; only set this environment variable if you wish to change the listen port.|
+|`-e IOBROKER_WEB_PORT=8082`|By default, the web UI listen on port 8082; only set this environment variable if you wish to change the listen port.|
+|`-e AVAHI=0`|Set the local time zone so deCONZ has the correct time.|
+|`-e BT_ENABLE=0`|Only available with the full images. Enables bluetooth support.|
+|`-e ASTERISK=0`|Only available with the full images. Enables asterisk support.|
+||1 = ioBroker & asterisk running on same server with ffmpeg|
+||2 = ioBroker & asterisk running on same server with sox|
+||3 = ioBroker & asterisk running on different server with ffmpeg|
+||4 = ioBroker & asterisk running on different server with sox|
 
 #### Docker-Compose
 
@@ -63,26 +60,24 @@ A docker-compose.yml file is provided in the root of this image's GitHub repo. Y
 ```yaml
 version: "2"
 services:
-  deconz:
-    image: marthoc/deconz
-    container_name: deconz
+  iobroker:
+    image: duffbeer2000/dockertravis
+    container_name: iobroker
     network_mode: host
     restart: always
     volumes:
-      - /opt/deconz:/root/.local/share/dresden-elektronik/deCONZ
-    devices:
-      - /dev/ttyUSB0
+      - /your/iobroker/folder:/opt/iobroker
     environment:
-      - DECONZ_WEB_PORT=80
-      - DECONZ_WS_PORT=443
-      - DEBUG_INFO=1
-      - DEBUG_APS=0
-      - DEBUG_ZCL=0
-      - DEBUG_ZDP=0
-      - DEBUG_OTAU=0
+      - LANG=de_DE.UTF-8
+      - TZ=Europe/Berlin
+      - IOBROKER_ADMIN_PORT=8081
+      - IOBROKER_WEB_PORT=8082
+      - AVAHI=0
+      - BT_ENABLE=0
+      - ASTERISK=0
 ```
 
-Then, you can do `docker-compose pull` to pull the latest marthoc/deconz image, `docker-compose up -d` to start the deconz container service, and `docker-compose down` to stop the deconz service and delete the container. Note that these commands will also pull, start, and stop any other services defined in docker-compose.yml.
+Then, you can do `docker-compose pull` to pull the latest duffbeer2000/dockertravis image, `docker-compose up -d` to start the iobroker container service, and `docker-compose down` to stop the iobroker service and delete the container. Note that these commands will also pull, start, and stop any other services defined in docker-compose.yml.
 
 #### Running on Docker for Mac / Docker for Windows
 
@@ -90,94 +85,45 @@ The `--net=host` option is not yet supported on Mac/Windows. To run this contain
 
 ```bash
 docker run -d \
-    --name=deconz \
+    --name=iobroker \
     -p 80:80 \
     -p 443:443 \
     --restart=always \
-    -v /opt/deconz:/root/.local/share/dresden-elektronik/deCONZ \
-    --device=/dev/ttyUSB0 \
-    -e DECONZ_WEB_PORT=80 \
-    -e DECONZ_WS_PORT=443 \
+    -v /your/iobroker/folder:/opt/iobroker \
+    -e IOBROKER_ADMIN_PORT=8081 \
+    -e IOBROKER_WEB_PORT=8082 \
     marthoc/deconz
 ```
 
-### Configuring Raspbian for RaspBee
-
-By default, Raspbian enables Bluetooth and configures a login shell over serial (tty); you must disable BT, disable the tty, and enable the serial port hardware to allow RaspBee to work properly under Docker.
-
-On a fresh install of Raspbian:
-1. `echo 'dtoverlay=pi3-disable-bt' | sudo tee -a /boot/config.txt`
-2. `sudo raspi-config`
-3. Select `Interfacing Options`
-4. Select `Serial`
-5. “Would you like a login shell to be accessible over serial?” Select `No`
-6. “Would you like the serial port hardware to be enabled?” Select `Yes`
-7. Exit raspi-config and reboot
-
-### Updating Conbee/RaspBee Firmware
-
-Firmware updates from the web UI will fail silently. Instead, an interactive utility script is provided as part of this Docker image that you can use to flash your device's firmware. The script has been tested and verified to work for Conbee on amd64 Debian linux and armhf Raspbian Stretch and RaspBee on armhf Raspbian Stretch. To use it, follow the below instructions:
-
-1. Check your deCONZ container logs for the update firmware file name: type `docker logs [container name]`, and look for lines near the beginning of the log that look like this, noting the .CGF file name listed (you'll need this later):
-```
-GW update firmware found: /usr/share/deCONZ/firmware/deCONZ_Rpi_0x261e0500.bin.GCF
-GW firmware version: 0x261c0500
-GW firmware version shall be updated to: 0x261e0500
-```
-
-2. `docker stop [container name]` or `docker-compose down` to stop your running deCONZ container (you must do this or the firmware update will fail).
-
-3. Invoke the firmware update script: `docker run -it --rm --entrypoint "/firmware-update.sh" --privileged --cap-add=ALL -v /dev:/dev -v /lib/modules:/lib/modules -v /sys:/sys marthoc/deconz`
-
-4. Follow the prompts:
-- Enter C for Conbee, or R for RaspBee.
-- If flashing Conbee, then enter the number that corresponds to the Conbee device in the listing.
-- Type or paste the full file name that corresponds to the file name that you found in the deCONZ container logs in step 1 (or, select a different filename, but you should have a good reason for doing this).
-- If the device/number and file name look OK, type Y to start flashing!
-
-5. Restart your deCONZ container (`docker start [container name]` or `docker-compose up`).
-
-#### Firmware Flashing Script FAQ
-
-Q: Why does the script give an error about not being able to unload modules ftdi_sio and usbserial, or that the device couldn't be rest?
-
-A: In order to flash the device, no other program or device on the system can be using these kernel modules or the device. Stop any program/container that could be using the modules or device (likely deCONZ) and then invoke the script again. If the error persists, you may need to temporarily remove other USB serial devices from the system in order allow the script to completely unload the kernel modules.
-
-#### Viewing the deCONZ ZigBee mesh
-
-Setting the environment variable DECONZ_VNC_MODE to 1 enables a VNC server in the container; connect to this VNC server with a VNC client to view the deCONZ ZigBee mesh. The environment variable DECONZ_VNC_PORT allows you to control the port the VNC server listens on (default 5900, port must be 5900 or larger); environment variable DECONZ_VNC_PASSWORD allows you to set the password for the VNC server (default is 'changeme' and should be changed!).
 
 ### Gotchas / Known Issues
 
-Firmware updates from the web UI will fail silently and the Conbee/RaspBee device will stay at its current firmware level. See "Updating Conbee/RaspBee Firmware" above for instructions to update your device's firmware when a new version is available.
-
-Over-the-air update functionality is currently untested.
 
 ### Issues / Contributing
 
-Please raise any issues with this container at its GitHub repo: https://github.com/marthoc/docker-deconz. Please check the "Gotchas / Known Issues" section above before raising an Issue on GitHub in case the issue is already known.
+Please raise any issues with this container at its GitHub repo: https://github.com/duffbeer2000/dockertravis. Please check the "Gotchas / Known Issues" section above before raising an Issue on GitHub in case the issue is already known.
 
 To contribute, please fork the GitHub repo, create a feature branch, and raise a Pull Request; for simple changes/fixes, it may be more effective to raise an Issue instead.
 
 ### Building Locally
 
-Pulling `marthoc/deconz` from Docker Hub is the recommended way to obtain this image. However, you can build this image locally by:
+Pulling `duffbeer2000/dockertravis` from Docker Hub is the recommended way to obtain this image. However, you can build this image locally by:
 
 ```bash
-git clone https://github.com/marthoc/docker-deconz.git
-cd docker-deconz
-docker build -t "[your-user/]deconz[:local]" ./[arch]
+git clone https://github.com/duffbeer2000/dockertravis.git
+cd dockertravis
+docker build -t "[your-user/]iobroker[:local]" ./[arch]
 ```
 
 |Parameter|Description|
 |---------|-----------|
 |`[your-user/]`|Your username (optional).|
-|`deconz`|The name you want the built Docker image to have on your system (default: deconz).|
+|`iobroker`|The name you want the built Docker image to have on your system (default: deconz).|
 |`[local]`|Adds the tag `:local` to the image (to help differentiate between this image and your locally built image) (optional).|
 |`[arch]`|The architecture you want to build for (currently supported options: `amd64` and `armhf`).|
 
 ### Acknowledgments
 
-Dresden Elektronik for making deCONZ and the Conbee and RaspBee hardware.
+ioBroker GmbH for making ioBroker.
 
-@krallin for his "tini" container init process: https://github.com/krallin/tini.
+@buanet for his iobroker container from which I was inspired: https://github.com/buanet/docker-iobroker.
