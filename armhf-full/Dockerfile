@@ -28,11 +28,7 @@ RUN apt-get update && apt-get install -y \
 	net-tools \
  && rm -rf /var/lib/apt/lists/*
 
-# Add WiringPi, install WiringPi
-ADD https://archive.raspberrypi.org/debian/pool/main/w/wiringpi/wiringpi_${WIRINGPI_VERSION}_armhf.deb /wiringpi.deb
-RUN dpkg -i /wiringpi.deb && \
-    rm -f /wiringpi.deb
-	
+
 ## Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
  && apt-get install -y nodejs \
@@ -58,14 +54,20 @@ RUN mkdir -p /opt/scripts \
 ## ioBroker installation
 RUN echo $(hostname) > /opt/scripts/.install_host \
  && sudo apt-get update \
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
+ && npm config set unsafe-perm true \
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
  && curl -sL https://iobroker.net/install.sh | bash - \
  && sudo rm -rf /var/lib/apt/lists/*
 
 ## Install Node.js native addon build tool
 WORKDIR /opt/iobroker/
 RUN sudo npm install node-gyp -g \
- && sudo tar -cf /opt/initial_iobroker.tar -C / opt/iobroker
-
+ && sudo tar -cf /opt/initial_iobroker.tar -C / opt/iobroker \
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
+ && npm config set unsafe-perm false
+ ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
+ 
 ## Add necessary scripts
 COPY maintenance_scripts /opt/maintenance_scripts
 COPY scripts /opt/scripts
