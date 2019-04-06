@@ -1,4 +1,4 @@
-FROM arm64v8/debian
+FROM arm64v8/debian:latest
 
 MAINTAINER Christian
 
