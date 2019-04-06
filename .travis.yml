@@ -10,6 +10,8 @@ install:
   - wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
   - chmod +x manifest-tool
 script:
+# Switch Architecture
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 # Build arm64v8
   - docker build -t "duffbeer2000/dockertravis:arm64v8" ./arm64v8
 # Build arm64v8-min
@@ -22,8 +24,6 @@ script:
   - docker build -t "duffbeer2000/dockertravis:amd64-min" ./amd64-min
 # Build amd64-full
   - docker build -t "duffbeer2000/dockertravis:amd64-full" ./amd64-full
-# Switch Architecture
-  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 # Switch Architecture
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 # Build arm32v7
