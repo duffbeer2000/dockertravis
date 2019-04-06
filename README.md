@@ -32,7 +32,7 @@ docker run -d \
 |`--net=host`|Uses host networking mode; by default, the web UIs listen on port 8081. If these port conflict with other services on your host, you can change it through the environment variables IOBROKER_WEB_PORT described below.|
 |`--restart=always`|Start the container when Docker starts (i.e. on boot/reboot).|
 |`-v /etc/localtime:/etc/localtime:ro`|Ensure the container has the correct local time (alternatively, use the TZ environment variable, see below).|
-|`-v /your/iobroker/folder:/opt/iobroker`|Bind mount /opt/deconz (or the directory of your choice) into the container for persistent storage.|
+|`-v /your/iobroker/folder:/opt/iobroker`|Bind mount /your/iobroker/folder (or the directory of your choice) into the container for persistent storage.|
 |`duffbeer2000/dockertravis`|This image uses a manifest list for multiarch support; specifying duffbeer2000/iobroker (i.e. duffbeer2000/iobroker:latest) will pull the correct version for your arch.|
 
 #### Environment Variables
@@ -41,11 +41,11 @@ Use these environment variables to change the default behaviour of the container
 
 |Parameter|Description|
 |---------|-----------|
-|`-e LANG=de_DE.UTF-8`|Set the local time zone so deCONZ has the correct time.|
-|`-e TZ=Europe/Berlin`|Set the local time zone so deCONZ has the correct time.|
+|`-e LANG=de_DE.UTF-8`|Set the local time zone so iobroker has the correct time.|
+|`-e TZ=Europe/Berlin`|Set the local time zone so iobroker has the correct time.|
 |`-e IOBROKER_ADMIN_PORT=8081`|By default, the admin UI listen on port 8081; only set this environment variable if you wish to change the listen port.|
 |`-e IOBROKER_WEB_PORT=8082`|By default, the web UI listen on port 8082; only set this environment variable if you wish to change the listen port.|
-|`-e AVAHI=0`|Set the local time zone so deCONZ has the correct time.|
+|`-e AVAHI=0`|Will install and activate avahi-daemon for supporting yahka-adapter.|
 |`-e BT_ENABLE=0`|Only available with the full images. Enables bluetooth support.|
 |`-e ASTERISK=0`|Only available with the full images. Enables asterisk support.|
 ||1 = ioBroker & asterisk running on same server with ffmpeg|
@@ -95,6 +95,28 @@ docker run -d \
     marthoc/deconz
 ```
 
+### Tags
+|TAG|Description|
+|---------|-----------|
+|`amd64`|Standard image for amd64 achitecture, corrects false permissions of the ioBroker directory.|
+|`amd64-full`|Full image for amd64 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`amd64-min`|Minimal image for amd64 achitecture, you have to look for everything on your own.|
+|`arm64v8`|Standard image for arm64v8 achitecture, corrects false permissions of the ioBroker Directory.|
+|`arm64v8-full`|Full image for arm64v8 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`arm64v8-min`|Minimal image for arm64v8 achitecture, you have to look for everything on your own.|
+|`arm32v7`|Standard image for arm32v7 achitecture, corrects false permissions of the ioBroker Directory.|
+|`arm32v7-full`|Full image for arm32v7 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`arm32v7-min`|Minimal image for arm32v7 achitecture, you have to look for everything on your own.|
+|`arm32v6`|Standard image for arm32v6 achitecture, corrects false permissions of the ioBroker Directory.|
+|`arm32v6-full`|Full image for arm32v6 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`arm32v6-min`|Minimal image for arm32v6 achitecture, you have to look for everything on your own.|
+|`arm32v5`|Standard image for arm32v5 achitecture, corrects false permissions of the ioBroker Directory.|
+|`arm32v5-full`|Full image for arm32v5 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`arm32v5-min`|Minimal image for arm32v5 achitecture, you have to look for everything on your own.|
+|`*architecture*-full-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
+|`*architecture*-min-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
+|`*architecture*-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
+
 
 ### Gotchas / Known Issues
 
@@ -118,7 +140,7 @@ docker build -t "[your-user/]iobroker[:local]" ./[arch]
 |Parameter|Description|
 |---------|-----------|
 |`[your-user/]`|Your username (optional).|
-|`iobroker`|The name you want the built Docker image to have on your system (default: deconz).|
+|`iobroker`|The name you want the built Docker image to have on your system (default: iobroker).|
 |`[local]`|Adds the tag `:local` to the image (to help differentiate between this image and your locally built image) (optional).|
 |`[arch]`|The architecture you want to build for (currently supported options: `amd64` and `armhf`).|
 

@@ -1,4 +1,4 @@
-FROM balenalib/armv7hf-debian:stretch
+FROM arm32v6/debian
 
 MAINTAINER Christian
 
@@ -30,12 +30,18 @@ RUN apt-get update && apt-get install -y \
 ## Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
  && apt-get install -y nodejs \
- && rm -rf /var/lib/apt/lists/* \ 
+ && rm -rf /var/lib/apt/lists/* \
  ## Set language and timezone
  && sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
  && \dpkg-reconfigure --frontend=noninteractive locales \
  && \update-locale LANG=de_DE.UTF-8 \
  && cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+ 
+#https://hub.docker.com/_/debian/
+#https://github.com/docker-library/postgres/blob/69bc540ecfffecce72d49fa7e4a46680350037f9/9.6/Dockerfile#L21-L24
+#RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+#    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+#ENV LANG en_US.utf8
 
 ## Create the neccessary folders and set access rights
 RUN mkdir -p /opt/scripts \
