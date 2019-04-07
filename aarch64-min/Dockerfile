@@ -1,4 +1,4 @@
-FROM arm32v5/debian
+FROM balenalib/aarch64-debian:stretch
 
 MAINTAINER Christian
 

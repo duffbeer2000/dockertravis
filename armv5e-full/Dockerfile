@@ -1,4 +1,4 @@
-FROM arm32v7/debian
+FROM balenalib/armv5e-debian:stretch
 
 MAINTAINER Christian
 
@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y \
 	# https://forum.iobroker.net/viewtopic.php?t=10920
 	python-dev\
 	sudo \
+	# install to get installed adapters
+	jq \
 	# Install nano and net-tools for debugging
 	nano \
 	net-tools \
@@ -30,7 +32,7 @@ RUN apt-get update && apt-get install -y \
 ## Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
  && apt-get install -y nodejs \
- && rm -rf /var/lib/apt/lists/* \
+ && rm -rf /var/lib/apt/lists/* \ 
  ## Set language and timezone
  && sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
  && \dpkg-reconfigure --frontend=noninteractive locales \
@@ -45,7 +47,9 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
 
 ## Create the neccessary folders and set access rights
 RUN mkdir -p /opt/scripts \
- && chmod 777 /opt/scripts
+ && mkdir -p /opt/maintenance_scripts \
+ && chmod 777 /opt/scripts \
+ && chmod 777 /opt/maintenance_scripts
 
 ## ioBroker installation
 RUN echo $(hostname) > /opt/scripts/.install_host \
@@ -63,12 +67,14 @@ RUN sudo npm install node-gyp -g \
  ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
  && npm config set unsafe-perm false
  ##ATTENTION THIS IS A TEMPORARY WORKAROUND TILL THE BUG IS FIXED
-
+ 
 ## Add necessary scripts
+COPY maintenance_scripts /opt/maintenance_scripts
 COPY scripts /opt/scripts
 
 # Set scripts executable
-RUN chmod -R +x /opt/scripts
+RUN chmod -R +x /opt/scripts \
+ && chmod -R +x /opt/maintenance_scripts
 
 # Exposed Ports
 # 8081 iobroker admin
@@ -86,6 +92,8 @@ ENV LANG="de_DE.UTF-8" \
     TZ="Europe/Berlin" \
 	AVAHI="0" \
 	IOBROKER_ADMIN_PORT="8081" \
-	IOBROKER_WEB_PORT="8082"
+	IOBROKER_WEB_PORT="8082" \
+	BT_ENABLE="0" \
+	ASTERISK="0"
 
 CMD ["bash", "/opt/scripts/iobroker_startup.sh"]
