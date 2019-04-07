@@ -4,7 +4,7 @@
 
 This Docker image containerizes the ioBroker software from ioBroker GmbH. ioBroker is an integration platform for the Internet of Things, focused on Building Automation, Smart Metering, Ambient Assisted Living, Process Automation, Visualization and Data Logging.
 
-ioBroker is supported on `amd64` and `armhf` (i.e. RaspberryPi 2/3) architectures.
+ioBroker is supported on `amd64`, `armv7hf` (i.e. RaspberryPi 2/3), `aarch64`, and `armv5e` architectures.
 
 This image is available on (and should be pulled from) Docker Hub: `duffbeer2000/dockertravis`.
 
@@ -101,18 +101,15 @@ docker run -d \
 |`amd64`|Standard image for amd64 achitecture, corrects false permissions of the ioBroker directory.|
 |`amd64-full`|Full image for amd64 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
 |`amd64-min`|Minimal image for amd64 achitecture, you have to look for everything on your own.|
-|`arm64v8`|Standard image for arm64v8 achitecture, corrects false permissions of the ioBroker Directory.|
-|`arm64v8-full`|Full image for arm64v8 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
-|`arm64v8-min`|Minimal image for arm64v8 achitecture, you have to look for everything on your own.|
-|`arm32v7`|Standard image for arm32v7 achitecture, corrects false permissions of the ioBroker Directory.|
-|`arm32v7-full`|Full image for arm32v7 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
-|`arm32v7-min`|Minimal image for arm32v7 achitecture, you have to look for everything on your own.|
-|`arm32v6`|Standard image for arm32v6 achitecture, corrects false permissions of the ioBroker Directory.|
-|`arm32v6-full`|Full image for arm32v6 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
-|`arm32v6-min`|Minimal image for arm32v6 achitecture, you have to look for everything on your own.|
-|`arm32v5`|Standard image for arm32v5 achitecture, corrects false permissions of the ioBroker Directory.|
-|`arm32v5-full`|Full image for arm32v5 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
-|`arm32v5-min`|Minimal image for arm32v5 achitecture, you have to look for everything on your own.|
+|`aarch64`|Standard image for aarch64 achitecture, corrects false permissions of the ioBroker Directory.|
+|`aarch64-full`|Full image for aarch64 achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`aarch64-min`|Minimal image for aarch64 achitecture, you have to look for everything on your own.|
+|`armv7hf`|Standard image for armv7hf achitecture, corrects false permissions of the ioBroker Directory.|
+|`armv7hf-full`|Full image for armv7hf achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`armv7hf-min`|Minimal image for armv7hf achitecture, you have to look for everything on your own.|
+|`armv5e`|Standard image for armv5e achitecture, corrects false permissions of the ioBroker Directory.|
+|`armv5e-full`|Full image for armv5e achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
+|`armv5e-min`|Minimal image for armv5e achitecture, you have to look for everything on your own.|
 |`*architecture*-full-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
 |`*architecture*-min-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
 |`*architecture*-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
