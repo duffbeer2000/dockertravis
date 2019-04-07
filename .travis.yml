@@ -11,7 +11,7 @@ install:
   - chmod +x manifest-tool
 jobs:
   include:
-    - stage amd64
+    - stage: amd64
       script:
       # Build amd64
         - docker build -t "duffbeer2000/dockertravis:amd64" ./amd64
@@ -19,7 +19,7 @@ jobs:
         - docker build -t "duffbeer2000/dockertravis:amd64-min" ./amd64-min
       # Build amd64-full
         - docker build -t "duffbeer2000/dockertravis:amd64-full" ./amd64-full
-    - stage aarch64
+    - stage: aarch64
       script:
       # Switch Architecture
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
@@ -29,7 +29,7 @@ jobs:
         - docker build -t "duffbeer2000/dockertravis:aarch64-min" ./aarch64-min
       # Build aarch64-full
         - docker build -t "duffbeer2000/dockertravis:aarch64-full" ./aarch64-full
-    - stage armv7hv
+    - stage: armv7hv
       script:
       # Switch Architecture
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
@@ -39,7 +39,7 @@ jobs:
         - docker build -t "duffbeer2000/dockertravis:armv7hf-min" ./armv7hf-min
       # Build armv7hf-full
         - docker build -t "duffbeer2000/dockertravis:armv7hf-full" ./armv7hf-full
-    - stage armv6
+    - stage: armv6
       script:
       # Switch Architecture
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
@@ -49,7 +49,7 @@ jobs:
         - docker build -t "duffbeer2000/dockertravis:armv6-min" ./armv6-min
       # Build armv6-full
         - docker build -t "duffbeer2000/dockertravis:armv6-full" ./armv6-full
-    - stage armv5e
+    - stage: armv5e
       script:
       # Switch Architecture
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
