@@ -17,9 +17,3 @@ manifests:
       architecture: arm
       variant: armv7l
       os: linux
-  -
-    image: duffbeer2000/iobroker:armv5e
-    platform:
-      architecture: arm
-      variant: armv5e
-      os: linux

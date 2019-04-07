@@ -4,7 +4,7 @@
 
 This Docker image containerizes the ioBroker software from ioBroker GmbH. ioBroker is an integration platform for the Internet of Things, focused on Building Automation, Smart Metering, Ambient Assisted Living, Process Automation, Visualization and Data Logging.
 
-ioBroker is supported on `amd64`, `armv7hf` (i.e. RaspberryPi 2/3), `aarch64`, and `armv5e` architectures.
+ioBroker is supported on `amd64`, `armv7hf` (i.e. RaspberryPi 2/3), and `aarch64` architectures.
 
 This image is available on (and should be pulled from) Docker Hub: `duffbeer2000/dockertravis`.
 
@@ -107,9 +107,6 @@ docker run -d \
 |`armv7hf`|Standard image for armv7hf achitecture, corrects false permissions of the ioBroker Directory.|
 |`armv7hf-full`|Full image for armv7hf achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
 |`armv7hf-min`|Minimal image for armv7hf achitecture, you have to look for everything on your own.|
-|`armv5e`|Standard image for armv5e achitecture, corrects false permissions of the ioBroker Directory.|
-|`armv5e-full`|Full image for armv5e achitecture, scans the ioBroker directory for known adapter dependencies and corrects false permissions of the ioBroker directory.|
-|`armv5e-min`|Minimal image for armv5e achitecture, you have to look for everything on your own.|
 |`*architecture*-full-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
 |`*architecture*-min-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
 |`*architecture*-X.X.X|Same as above but with fixed container version, so there is no update till you change it.|
