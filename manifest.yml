@@ -1,18 +1,18 @@
-image: duffbeer2000/iobroker:latest
+image: duffbeer2000/dockertravis:latest
 manifests:
   -
-    image: duffbeer2000/iobroker:amd64
+    image: duffbeer2000/dockertravis:amd64
     platform:
       architecture: amd64
       os: linux
   -
-    image: duffbeer2000/iobroker:aarch64
+    image: duffbeer2000/dockertravis:aarch64
     platform:
       architecture: arm
       variant: aarch64
       os: linux
   -
-    image: duffbeer2000/iobroker:armv7hf
+    image: duffbeer2000/dockertravis:armv7hf
     platform:
       architecture: arm
       variant: armv7l
