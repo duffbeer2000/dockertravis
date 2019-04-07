@@ -10,14 +10,6 @@ install:
   - wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64 -O manifest-tool
   - chmod +x manifest-tool
 script:
-# Switch Architecture
-  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-# Build arm64v8
-  - docker build -t "duffbeer2000/dockertravis:arm64v8" ./arm64v8
-# Build arm64v8-min
-  - docker build -t "duffbeer2000/dockertravis:arm64v8-min" ./arm64v8-min
-# Build arm64v8-full
-  - docker build -t "duffbeer2000/dockertravis:arm64v8-full" ./arm64v8-full
 # Build amd64
   - docker build -t "duffbeer2000/dockertravis:amd64" ./amd64
 # Build amd64-min
@@ -26,28 +18,36 @@ script:
   - docker build -t "duffbeer2000/dockertravis:amd64-full" ./amd64-full
 # Switch Architecture
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-# Build arm32v7
-  - docker build -t "duffbeer2000/dockertravis:arm32v7" ./arm32v7
-# Build arm32v7-min
-  - docker build -t "duffbeer2000/dockertravis:arm32v7-min" ./arm32v7-min
-# Build arm32v7-full
-  - docker build -t "duffbeer2000/dockertravis:arm32v7-full" ./arm32v7-full
+# Build aarch64
+  - docker build -t "duffbeer2000/dockertravis:aarch64" ./aarch64
+# Build aarch64-min
+  - docker build -t "duffbeer2000/dockertravis:aarch64-min" ./aarch64-min
+# Build aarch64-full
+  - docker build -t "duffbeer2000/dockertravis:aarch64-full" ./aarch64-full
 # Switch Architecture
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-# Build arm32v6
-  - docker build -t "duffbeer2000/dockertravis:arm32v6" ./arm32v6
-# Build arm32v6-min
-  - docker build -t "duffbeer2000/dockertravis:arm32v6-min" ./arm32v6-min
-# Build arm32v6-full
-  - docker build -t "duffbeer2000/dockertravis:arm32v6-full" ./arm32v6-full
+# Build armv7hf
+  - docker build -t "duffbeer2000/dockertravis:armv7hf" ./armv7hf
+# Build armv7hf-min
+  - docker build -t "duffbeer2000/dockertravis:armv7hf-min" ./armv7hf-min
+# Build armv7hf-full
+  - docker build -t "duffbeer2000/dockertravis:armv7hf-full" ./armv7hf-full
 # Switch Architecture
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-# Build arm32v5
-  - docker build -t "duffbeer2000/dockertravis:arm32v5" ./arm32v5
-# Build arm32v5-min
-  - docker build -t "duffbeer2000/dockertravis:arm32v5-min" ./arm32v5-min
-# Build arm32v5-full
-  - docker build -t "duffbeer2000/dockertravis:arm32v5-full" ./arm32v5-full
+# Build armv6
+  - docker build -t "duffbeer2000/dockertravis:armv6" ./armv6
+# Build armv6-min
+  - docker build -t "duffbeer2000/dockertravis:armv6-min" ./armv6-min
+# Build armv6-full
+  - docker build -t "duffbeer2000/dockertravis:armv6-full" ./armv6-full
+# Switch Architecture
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+# Build armv5e
+  - docker build -t "duffbeer2000/dockertravis:armv5e" ./armv5e
+# Build armv5e-min
+  - docker build -t "duffbeer2000/dockertravis:armv5e-min" ./armv5e-min
+# Build armv5e-full
+  - docker build -t "duffbeer2000/dockertravis:armv5e-full" ./armv5e-full
 #
 after_success:
 # Tag and push built images
@@ -64,42 +64,42 @@ after_success:
       docker tag duffbeer2000/dockertravis:amd64-full duffbeer2000/dockertravis:amd64-full-$VERSION
       docker push duffbeer2000/dockertravis:amd64-full
       docker push duffbeer2000/dockertravis:amd64-full-$VERSION
-      docker tag duffbeer2000/dockertravis:arm64v8 duffbeer2000/dockertravis:arm64v8-$VERSION
-      docker push duffbeer2000/dockertravis:arm64v8
-      docker push duffbeer2000/dockertravis:arm64v8-$VERSION
-      docker tag duffbeer2000/dockertravis:arm64v8-min duffbeer2000/dockertravis:arm64v8-min-$VERSION
-      docker push duffbeer2000/dockertravis:arm64v8-min
-      docker push duffbeer2000/dockertravis:arm64v8-min-$VERSION
-      docker tag duffbeer2000/dockertravis:arm64v8-full duffbeer2000/dockertravis:arm64v8-full-$VERSION
-      docker push duffbeer2000/dockertravis:arm64v8-full
-      docker push duffbeer2000/dockertravis:arm64v8-full-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v7 duffbeer2000/dockertravis:arm32v7-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v7
-      docker push duffbeer2000/dockertravis:arm32v7-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v7-min duffbeer2000/dockertravis:arm32v7-min-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v7-min
-      docker push duffbeer2000/dockertravis:arm32v7-min-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v7-full duffbeer2000/dockertravis:arm32v7-full-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v7-full
-      docker push duffbeer2000/dockertravis:arm32v7-full-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v6 duffbeer2000/dockertravis:arm32v6-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v6
-      docker push duffbeer2000/dockertravis:arm32v6-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v6-min duffbeer2000/dockertravis:arm32v6-min-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v6-min
-      docker push duffbeer2000/dockertravis:arm32v6-min-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v6-full duffbeer2000/dockertravis:arm32v6-full-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v6-full
-      docker push duffbeer2000/dockertravis:arm32v6-full-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v5 duffbeer2000/dockertravis:arm32v5-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v5
-      docker push duffbeer2000/dockertravis:arm32v5-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v5-min duffbeer2000/dockertravis:arm32v5-min-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v5-min
-      docker push duffbeer2000/dockertravis:arm32v5-min-$VERSION
-      docker tag duffbeer2000/dockertravis:arm32v5-full duffbeer2000/dockertravis:arm32v5-full-$VERSION
-      docker push duffbeer2000/dockertravis:arm32v5-full
-      docker push duffbeer2000/dockertravis:arm32v5-full-$VERSION
+      docker tag duffbeer2000/dockertravis:aarch64 duffbeer2000/dockertravis:aarch64-$VERSION
+      docker push duffbeer2000/dockertravis:aarch64
+      docker push duffbeer2000/dockertravis:aarch64-$VERSION
+      docker tag duffbeer2000/dockertravis:aarch64-min duffbeer2000/dockertravis:aarch64-min-$VERSION
+      docker push duffbeer2000/dockertravis:aarch64-min
+      docker push duffbeer2000/dockertravis:aarch64-min-$VERSION
+      docker tag duffbeer2000/dockertravis:aarch64-full duffbeer2000/dockertravis:aarch64-full-$VERSION
+      docker push duffbeer2000/dockertravis:aarch64-full
+      docker push duffbeer2000/dockertravis:aarch64-full-$VERSION
+      docker tag duffbeer2000/dockertravis:armv7hf duffbeer2000/dockertravis:armv7hf-$VERSION
+      docker push duffbeer2000/dockertravis:armv7hf
+      docker push duffbeer2000/dockertravis:armv7hf-$VERSION
+      docker tag duffbeer2000/dockertravis:armv7hf-min duffbeer2000/dockertravis:armv7hf-min-$VERSION
+      docker push duffbeer2000/dockertravis:armv7hf-min
+      docker push duffbeer2000/dockertravis:armv7hf-min-$VERSION
+      docker tag duffbeer2000/dockertravis:armv7hf-full duffbeer2000/dockertravis:armv7hf-full-$VERSION
+      docker push duffbeer2000/dockertravis:armv7hf-full
+      docker push duffbeer2000/dockertravis:armv7hf-full-$VERSION
+      docker tag duffbeer2000/dockertravis:armv6 duffbeer2000/dockertravis:armv6-$VERSION
+      docker push duffbeer2000/dockertravis:armv6
+      docker push duffbeer2000/dockertravis:armv6-$VERSION
+      docker tag duffbeer2000/dockertravis:armv6-min duffbeer2000/dockertravis:armv6-min-$VERSION
+      docker push duffbeer2000/dockertravis:armv6-min
+      docker push duffbeer2000/dockertravis:armv6-min-$VERSION
+      docker tag duffbeer2000/dockertravis:armv6-full duffbeer2000/dockertravis:armv6-full-$VERSION
+      docker push duffbeer2000/dockertravis:armv6-full
+      docker push duffbeer2000/dockertravis:armv6-full-$VERSION
+      docker tag duffbeer2000/dockertravis:armv5e duffbeer2000/dockertravis:armv5e-$VERSION
+      docker push duffbeer2000/dockertravis:armv5e
+      docker push duffbeer2000/dockertravis:armv5e-$VERSION
+      docker tag duffbeer2000/dockertravis:armv5e-min duffbeer2000/dockertravis:armv5e-min-$VERSION
+      docker push duffbeer2000/dockertravis:armv5e-min
+      docker push duffbeer2000/dockertravis:armv5e-min-$VERSION
+      docker tag duffbeer2000/dockertravis:armv5e-full duffbeer2000/dockertravis:armv5e-full-$VERSION
+      docker push duffbeer2000/dockertravis:armv5e-full
+      docker push duffbeer2000/dockertravis:armv5e-full-$VERSION
     fi
 # Update repository manifest for multiarch duffbeer2000/dockertravis:latest
   - >
