@@ -24,9 +24,9 @@ jobs:
         - ARCH=amd64
         - JOB_NAME="Build docker images"
       script:
-        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
-        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
-        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-min/scripts/iobroker_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/iobroker_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/iobroker_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/iobroker_startup.sh
         - cat $ARCH-min/scripts/iobroker_startup.sh
       # Build amd64
         - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./amd64
@@ -40,7 +40,7 @@ jobs:
         - ARCH=amd64
         - JOB_NAME="Manifest"
       script:
-        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/iobroker_startup.sh
 
 #    - stage: Build docker images
 #      env:
@@ -48,9 +48,9 @@ jobs:
 #      script:
 #      # Switch Architecture
 #        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
-#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
-#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-min/scripts/iobroker_startup.sh
+#        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/iobroker_startup.sh
+#        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/iobroker_startup.sh
+#        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/iobroker_startup.sh
 #      # Build aarch64
 #        - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./aarch64
 #      # Build aarch64-min
@@ -64,9 +64,9 @@ jobs:
 #      script:
 #      # Switch Architecture
 #        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
-#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
-#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-min/scripts/iobroker_startup.sh
+#        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/iobroker_startup.sh
+#        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/iobroker_startup.sh
+#        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/iobroker_startup.sh
 #      # Build armv7hf
 #        - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./armv7hf
 #      # Build armv7hf-min
@@ -99,11 +99,15 @@ after_success:
       cat manifest.yaml | sed "s/\$$FULLVERSION/full-${VERSION}/g" > manifestfull.yaml
       #Push to dockerhub
       mv manifestversion.yaml manifest.yaml
+      cat manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       mv manifestlatest.yaml manifest.yaml
+      cat manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       mv manifestmin.yaml manifest.yaml
+      cat manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       mv manifestfull.yaml manifest.yaml
+      cat manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
     fi
