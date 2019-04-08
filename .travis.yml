@@ -23,53 +23,61 @@ jobs:
       env:
         - ARCH=amd64
       script:
+        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
+        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
+        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-min/scripts/iobroker_startup.sh
       # Build amd64
         - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./amd64
-      # Build amd64-full
-        - docker build -t "duffbeer2000/dockertravis:full-$VERSION-$ARCH" ./amd64-full
       # Build amd64-min
         - docker build -t "duffbeer2000/dockertravis:min-$VERSION-$ARCH" ./amd64-min
+      # Build amd64-full
+        - docker build -t "duffbeer2000/dockertravis:full-$VERSION-$ARCH" ./amd64-full
       # Push Images to DockerHub
 
-    - stage: Build docker images
-      env:
-        - ARCH=aarch64
-      script:
-      # Switch Architecture
-        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-      # Build aarch64
-        - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./aarch64
-      # Build aarch64-full
-        - docker build -t "duffbeer2000/dockertravis:full-$VERSION-$ARCH" ./aarch64-full
-      # Build aarch64-min
-        - docker build -t "duffbeer2000/dockertravis:min-$VERSION-$ARCH" ./aarch64-min
-
-    - stage: Build docker images
-      env:
-        - ARCH=arm7hf
-      script:
-      # Switch Architecture
-        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-      # Build armv7hf
-        - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./armv7hf
-      # Build armv7hf-full
-        - docker build -t "duffbeer2000/dockertravis:full-$VERSION-$ARCH" ./armv7hf-full
-      # Build armv7hf-min
-        - docker build -t "duffbeer2000/dockertravis:min-$VERSION-$ARCH" ./armv7hf-min
+#    - stage: Build docker images
+#      env:
+#        - ARCH=aarch64
+#      script:
+#      # Switch Architecture
+#        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
+#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
+#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-min/scripts/iobroker_startup.sh
+#      # Build aarch64
+#        - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./aarch64
+#      # Build aarch64-min
+#        - docker build -t "duffbeer2000/dockertravis:min-$VERSION-$ARCH" ./aarch64-min
+#      # Build aarch64-full
+#        - docker build -t "duffbeer2000/dockertravis:full-$VERSION-$ARCH" ./aarch64-full
+#
+#    - stage: Build docker images
+#      env:
+#        - ARCH=arm7hf
+#      script:
+#      # Switch Architecture
+#        - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
+#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
+#        - sed -i '/^version=/c\version="${VERSION}"' $ARCH-min/scripts/iobroker_startup.sh
+#      # Build armv7hf
+#        - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./armv7hf
+#      # Build armv7hf-min
+#        - docker build -t "duffbeer2000/dockertravis:min-$VERSION-$ARCH" ./armv7hf-min
+#      # Build armv7hf-full
+#        - docker build -t "duffbeer2000/dockertravis:full-$VERSION-$ARCH" ./armv7hf-full
 
 after_success:
 # Tag and push built images
   - >
-    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_JOB_NAME" == "Build docker images" ] ; then
       docker push duffbeer2000/dockertravis:$VERSION-$ARCH
       docker push duffbeer2000/dockertravis:full-$VERSION-$ARCH
       docker push duffbeer2000/dockertravis:min-$VERSION-$ARCH
     fi
     
-publish:
 # Update repository manifest for multiarch duffbeer2000/dockertravis:latest
   - >
-    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_JOB_NAME" != "Build docker images" ]; then
       cat manifest.yml | sed "s/\$$VERSION/${VERSION}/g" > manifest.yaml
       #image: duffbeer2000/dockertravis:version
       cat manifest.yaml | sed "s/\$$FULLVERSION/${FULLVERSION}/g" > manifestversion.yaml
