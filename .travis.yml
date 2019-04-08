@@ -86,17 +86,17 @@ after_success:
 # Update repository manifest for multiarch duffbeer2000/dockertravis:latest
   - >
     if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Manifest" ]; then
-      cat manifest.yml | sed "s/\$$VERSION/${VERSION}/g" > manifest.yaml
+      cat manifest.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
       #image: duffbeer2000/dockertravis:version
-      cat manifest.yaml | sed "s/\$$FULLVERSION/${VERSION}/g" > manifestversion.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/${VERSION}/g" > manifestversion.yaml
       #image: duffbeer2000/dockertravis:latest
-      cat manifest.yaml | sed "s/\$$FULLVERSION/latest/g" > manifestlatest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/latest/g" > manifestlatest.yaml
       #image: duffbeer2000/dockertravis:min-version
-      cat manifest.yml | sed "s/\$$VERSION/min-${VERSION}/g" > manifest.yaml
-      cat manifest.yaml | sed "s/\$$FULLVERSION/min-${VERSION}/g" > manifestmin.yaml
+      cat manifest.yml | sed "s/\$VERSION/min-${VERSION}/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/min-${VERSION}/g" > manifestmin.yaml
       #image: duffbeer2000/dockertravis:full-version
-      cat manifest.yml | sed "s/\$$VERSION/full-${VERSION}/g" > manifest.yaml
-      cat manifest.yaml | sed "s/\$$FULLVERSION/full-${VERSION}/g" > manifestfull.yaml
+      cat manifest.yml | sed "s/\$VERSION/full-${VERSION}/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/full-${VERSION}/g" > manifestfull.yaml
       #Push to dockerhub
       mv manifestversion.yaml manifest.yaml
       cat manifest.yaml
