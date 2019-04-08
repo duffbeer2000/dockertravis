@@ -6,7 +6,7 @@ ADMIN_PORT=$IOBROKER_ADMIN_PORT
 WEB_PORT=$IOBROKER_WEB_PORT
 
 #Declarate variables
-version="0.2.0 beta"
+version="0.7.0 beta"
 HOSTNAME_NEW=$(hostname)
 IOB_USER="iobroker"
 IOB_DIR="/opt/iobroker"
