@@ -26,13 +26,19 @@ jobs:
         - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
         - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
         - sed -i '/^version=/c\version="${VERSION}"' $ARCH-min/scripts/iobroker_startup.sh
+        - cat $ARCH-min/scripts/iobroker_startup.sh
       # Build amd64
         - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./amd64
       # Build amd64-min
         - docker build -t "duffbeer2000/dockertravis:min-$VERSION-$ARCH" ./amd64-min
       # Build amd64-full
         - docker build -t "duffbeer2000/dockertravis:full-$VERSION-$ARCH" ./amd64-full
-      # Push Images to DockerHub
+
+    - stage: Manifesttest
+      env:
+        - ARCH=amd64
+      script:
+        - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
 
 #    - stage: Build docker images
 #      env:
@@ -80,7 +86,7 @@ after_success:
     if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_JOB_NAME" != "Build docker images" ]; then
       cat manifest.yml | sed "s/\$$VERSION/${VERSION}/g" > manifest.yaml
       #image: duffbeer2000/dockertravis:version
-      cat manifest.yaml | sed "s/\$$FULLVERSION/${FULLVERSION}/g" > manifestversion.yaml
+      cat manifest.yaml | sed "s/\$$FULLVERSION/${VERSION}/g" > manifestversion.yaml
       #image: duffbeer2000/dockertravis:latest
       cat manifest.yaml | sed "s/\$$FULLVERSION/latest/g" > manifestlatest.yaml
       #image: duffbeer2000/dockertravis:min-version
