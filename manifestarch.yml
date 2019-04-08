@@ -1,0 +1,7 @@
+image: duffbeer2000/dockertravis:$FULLVERSION
+manifests:
+  -
+    image: duffbeer2000/dockertravis:$VERSION
+    platform:
+      architecture: amd64
+      os: linux
