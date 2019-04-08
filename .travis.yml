@@ -22,6 +22,7 @@ jobs:
     - stage: Build docker images
       env:
         - ARCH=amd64
+        - JOB_NAME="Build docker images"
       script:
         - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
         - sed -i '/^version=/c\version="${VERSION}"' $ARCH-full/scripts/iobroker_startup.sh
@@ -37,6 +38,7 @@ jobs:
     - stage: Manifesttest
       env:
         - ARCH=amd64
+        - JOB_NAME="Manifest"
       script:
         - sed -i '/^version=/c\version="${VERSION}"' $ARCH/scripts/iobroker_startup.sh
 
@@ -75,7 +77,7 @@ jobs:
 after_success:
 # Tag and push built images
   - >
-    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_JOB_NAME" == "Build docker images" ] ; then
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Build docker images" ] ; then
       docker push duffbeer2000/dockertravis:$VERSION-$ARCH
       docker push duffbeer2000/dockertravis:full-$VERSION-$ARCH
       docker push duffbeer2000/dockertravis:min-$VERSION-$ARCH
@@ -83,7 +85,7 @@ after_success:
     
 # Update repository manifest for multiarch duffbeer2000/dockertravis:latest
   - >
-    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_JOB_NAME" != "Build docker images" ]; then
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$JOB_NAME" == "Manifest" ]; then
       cat manifest.yml | sed "s/\$$VERSION/${VERSION}/g" > manifest.yaml
       #image: duffbeer2000/dockertravis:version
       cat manifest.yaml | sed "s/\$$FULLVERSION/${VERSION}/g" > manifestversion.yaml
