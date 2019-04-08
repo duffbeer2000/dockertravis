@@ -61,7 +61,7 @@ after_success:
 # Tag and push built images
   - >
     if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-      docker push duffbeer2000/dockertravis:$VERSION-$ARCH"
+      docker push duffbeer2000/dockertravis:$VERSION-$ARCH
       docker push duffbeer2000/dockertravis:full-$VERSION-$ARCH
       docker push duffbeer2000/dockertravis:min-$VERSION-$ARCH
     fi
