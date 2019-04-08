@@ -54,7 +54,7 @@ jobs:
 
     - stage: Build docker images
       env:
-        - ARCH=arm7hf
+        - ARCH=armv7hf
         - JOB_NAME="Build docker images"
       script:
       # Switch Architecture
@@ -91,35 +91,30 @@ after_success:
       cat manifest.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
       #image: duffbeer2000/dockertravis:version
       cat manifest.yaml | sed "s/\$FULLVERSION/${VERSION}/g" > manifestversion.yaml
-      mv manifestversion.yaml manifest.yaml
-      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       #image: duffbeer2000/dockertravis:latest
       cat manifest.yaml | sed "s/\$FULLVERSION/latest/g" > manifestlatest.yaml
-      mv manifestlatest.yaml manifest.yaml
-      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       #image: duffbeer2000/dockertravis:min-version
       cat manifest.yml | sed "s/\$VERSION/min-${VERSION}/g" > manifest.yaml
       cat manifest.yaml | sed "s/\$FULLVERSION/min-${VERSION}/g" > manifestmin.yaml
-      mv manifestmin.yaml manifest.yaml
-      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       #image: duffbeer2000/dockertravis:full-version
       cat manifest.yml | sed "s/\$VERSION/full-${VERSION}/g" > manifest.yaml
       cat manifest.yaml | sed "s/\$FULLVERSION/full-${VERSION}/g" > manifestfull.yaml
+      #Push to dockerhub
+      mv manifestversion.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifestlatest.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifestmin.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       mv manifestfull.yaml manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       #image: duffbeer2000/dockertravis:amd64
-      cat manifestarch.yml | sed "s/\$VERSION/${VERSION}-amd64/g" > manifest.yaml
-      cat manifest.yaml | sed "s/\$FULLVERSION/amd64/g" > manifestamd64.yaml
-      mv manifestamd64.yaml manifest.yaml
+      cat manifest_amd64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       #image: duffbeer2000/dockertravis:aarch64
-      cat manifestarch.yml | sed "s/\$VERSION/${VERSION}-aarch64/g" > manifest.yaml
-      cat manifest.yaml | sed "s/\$FULLVERSION/aarch64/g" > manifestaarch64.yaml
-      mv manifestaarch64.yaml manifest.yaml
+      cat manifest_aarch64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       #image: duffbeer2000/dockertravis:armv7hf
-      cat manifestarch.yml | sed "s/\$VERSION/${VERSION}-armv7hf/g" > manifest.yaml
-      cat manifest.yaml | sed "s/\$FULLVERSION/armv7hf/g" > manifestarmv7hf.yaml
-      mv manifestarmv7hf.yaml manifest.yaml
+      cat manifest_armv7hf.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
     fi

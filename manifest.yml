@@ -11,7 +11,7 @@ manifests:
       architecture: arm64
       os: linux
   -
-    image: duffbeer2000/dockertravis:$VERSION-arm7hf
+    image: duffbeer2000/dockertravis:$VERSION-armv7hf
     platform:
       architecture: arm
       variant: v7

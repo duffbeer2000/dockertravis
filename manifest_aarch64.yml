@@ -1,0 +1,7 @@
+image: duffbeer2000/dockertravis:aarch64
+manifests:
+  -
+    image: duffbeer2000/dockertravis:$VERSION-aarch64
+    platform:
+      architecture: arm64
+      os: linux
