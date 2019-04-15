@@ -1,6 +1,6 @@
-FROM debian:latest
+FROM debian:stretch
 
-MAINTAINER Christian
+LABEL maintainer="duffbeer2000"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
@@ -24,12 +24,13 @@ RUN apt-get update && apt-get install -y \
 	# Install nano and net-tools for debugging
 	nano \
 	net-tools \
+	--no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 
 ## Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
- && apt-get install -y nodejs \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+ && apt-get install -y nodejs --no-install-recommends \
  && rm -rf /var/lib/apt/lists/* \ 
  ## Set language and timezone
  && sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
@@ -37,32 +38,28 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
  && \update-locale LANG=de_DE.UTF-8 \
  && cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
  
-#https://hub.docker.com/_/debian/
-#https://github.com/docker-library/postgres/blob/69bc540ecfffecce72d49fa7e4a46680350037f9/9.6/Dockerfile#L21-L24
-#RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
-#    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-#ENV LANG en_US.utf8
-
 ## Create the neccessary folders and set access rights
 RUN mkdir -p /opt/scripts \
  && chmod 777 /opt/scripts
 
 ## ioBroker installation
 RUN echo $(hostname) > /opt/scripts/.install_host \
- && sudo apt-get update \
+ && apt-get update \
  && curl -sL https://iobroker.net/install.sh | bash - \
- && sudo rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/*
 
 ## Install Node.js native addon build tool
 WORKDIR /opt/iobroker/
-RUN sudo npm install node-gyp -g \
- && sudo tar -cf /opt/initial_iobroker.tar -C / opt/iobroker
+RUN npm install node-gyp -g \
+ && tar -cf /opt/initial_iobroker.tar -C / opt/iobroker
 
 ## Add necessary scripts
 COPY scripts /opt/scripts
 
 # Set scripts executable
 RUN chmod -R +x /opt/scripts
+
+VOLUME /opt/iobroker
 
 # Exposed Ports
 # 8081 iobroker admin

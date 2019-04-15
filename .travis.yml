@@ -24,10 +24,10 @@ jobs:
         - ARCH=amd64
         - JOB_NAME="Build docker images"
       script:
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/iobroker_startup.sh
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/iobroker_startup.sh
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/iobroker_startup.sh
-        - cat $ARCH-min/scripts/iobroker_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/dockertravis_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/dockertravis_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/dockertravis_startup.sh
+        - cat $ARCH-min/scripts/dockertravis_startup.sh
       # Build amd64
         - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./amd64
       # Build amd64-min
@@ -42,9 +42,9 @@ jobs:
       script:
       # Switch Architecture
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/iobroker_startup.sh
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/iobroker_startup.sh
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/iobroker_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/dockertravis_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/dockertravis_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/dockertravis_startup.sh
       # Build aarch64
         - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./aarch64
       # Build aarch64-min
@@ -59,9 +59,9 @@ jobs:
       script:
       # Switch Architecture
         - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/iobroker_startup.sh
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/iobroker_startup.sh
-        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/iobroker_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH/scripts/dockertravis_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-full/scripts/dockertravis_startup.sh
+        - sed -i "/^version=/c\version=${VERSION}" $ARCH-min/scripts/dockertravis_startup.sh
       # Build armv7hf
         - docker build -t "duffbeer2000/dockertravis:$VERSION-$ARCH" ./armv7hf
       # Build armv7hf-min
@@ -71,7 +71,7 @@ jobs:
         
     - stage: Manifest
       env:
-        - ARCH=amd64
+                    
         - JOB_NAME="Manifest"
       script:
         - echo Placeholder
@@ -95,10 +95,39 @@ after_success:
       cat manifest.yaml | sed "s/\$FULLVERSION/latest/g" > manifestlatest.yaml
       #image: duffbeer2000/dockertravis:min-version
       cat manifest.yml | sed "s/\$VERSION/min-${VERSION}/g" > manifest.yaml
-      cat manifest.yaml | sed "s/\$FULLVERSION/min-${VERSION}/g" > manifestmin.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/min-${VERSION}/g" > manifestminversion.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/min/g" > manifestmin.yaml
       #image: duffbeer2000/dockertravis:full-version
       cat manifest.yml | sed "s/\$VERSION/full-${VERSION}/g" > manifest.yaml
-      cat manifest.yaml | sed "s/\$FULLVERSION/full-${VERSION}/g" > manifestfull.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/full-${VERSION}/g" > manifestfullversion.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/full/g" > manifestfull.yaml
+      #image: duffbeer2000/dockertravis:amd64
+      cat manifest_amd64.yml | sed "s/\$VERSION/${VERSION}-amd64/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/amd64/g" > manifest_amd64.yaml
+      #image: duffbeer2000/dockertravis:full-amd64
+      cat manifest_amd64.yml | sed "s/\$VERSION/full-${VERSION}-amd64/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/full-amd64/g" > manifest_fullamd64.yaml
+      #image: duffbeer2000/dockertravis:min-amd64
+      cat manifest_amd64.yml | sed "s/\$VERSION/min-${VERSION}-amd64/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/min-amd64/g" > manifest_minamd64.yaml
+      #image: duffbeer2000/dockertravis:armv7hf
+      cat manifest_armv7hf.yml | sed "s/\$VERSION/${VERSION}-armv7hf/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/armv7hf/g" > manifest_armv7hf.yaml
+      #image: duffbeer2000/dockertravis:full-armv7hf
+      cat manifest_armv7hf.yml | sed "s/\$VERSION/full-${VERSION}-armv7hf/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/full-armv7hf/g" > manifest_fullarmv7hf.yaml
+      #image: duffbeer2000/dockertravis:min-armv7hf
+      cat manifest_armv7hf.yml | sed "s/\$VERSION/min-${VERSION}-armv7hf/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/min-armv7hf/g" > manifest_minarmv7hf.yaml
+      #image: duffbeer2000/dockertravis:aarch64
+      cat manifest_aarch64.yml | sed "s/\$VERSION/${VERSION}-aarch64/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/aarch64/g" > manifest_aarch64.yaml
+      #image: duffbeer2000/dockertravis:full-aarch64
+      cat manifest_aarch64.yml | sed "s/\$VERSION/full-${VERSION}-aarch64/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/full-aarch64/g" > manifest_fullaarch64.yaml
+      #image: duffbeer2000/dockertravis:min-aarch64
+      cat manifest_aarch64.yml | sed "s/\$VERSION/min-${VERSION}-aarch64/g" > manifest.yaml
+      cat manifest.yaml | sed "s/\$FULLVERSION/min-aarch64/g" > manifest_minaarch64.yaml
       #Push to dockerhub
       mv manifestversion.yaml manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
@@ -106,15 +135,30 @@ after_success:
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       mv manifestmin.yaml manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifestminversion.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
       mv manifestfull.yaml manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
-      #image: duffbeer2000/dockertravis:amd64
-      cat manifest_amd64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
+                                             
+      mv manifestfullversion.yaml manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
-      #image: duffbeer2000/dockertravis:aarch64
-      cat manifest_aarch64.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
+                                               
+      mv manifest_amd64.yaml manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
-      #image: duffbeer2000/dockertravis:armv7hf
-      cat manifest_armv7hf.yml | sed "s/\$VERSION/${VERSION}/g" > manifest.yaml
+      mv manifest_fullamd64.yaml manifest.yaml
       ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifest_minamd64.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifest_armv7hf.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifest_fullarmv7hf.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifest_minarmv7hf.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifest_aarch64.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifest_fullaarch64.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml
+      mv manifest_minaarch64.yaml manifest.yaml
+      ./manifest-tool --username $DOCKER_LOGIN --password $DOCKER_PASS push from-spec manifest.yaml      
     fi

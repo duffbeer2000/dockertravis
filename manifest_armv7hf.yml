@@ -1,7 +1,7 @@
-image: duffbeer2000/dockertravis:armv7hf
+image: duffbeer2000/dockertravis:$FULLVERSION
 manifests:
   -
-    image: duffbeer2000/dockertravis:$VERSION-armv7hf
+    image: duffbeer2000/dockertravis:$VERSION
     platform:
       architecture: arm
       variant: v7
